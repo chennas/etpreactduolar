@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Papa from "papaparse"; // Import papaparse library
 import '../src/styles/App.css';  // Import external CSS file for styles
-
 function App() {
+  const sentencesFilePath = "/sentences8.csv";   //File path to load and read
   const [sentences, setSentences] = useState([]); // State to store sentences
   const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
   const [isReading, setIsReading] = useState(false);
   const [completedSentences, setCompletedSentences] = useState([]); // Only store completed sentences
   const [speechFinished, setSpeechFinished] = useState(false);
-  const [countdown, setCountdown] = useState(20); // Countdown for the 20-second delay
+  const [countdown, setCountdown] = useState(10); // Countdown for the 10-second delay
   const [showCountdown, setShowCountdown] = useState(false); // To control when to show countdown
   const [currentSentence, setCurrentSentence] = useState(""); // Track the current sentence to show after countdown
   const [voices, setVoices] = useState([]); // State for available voices
@@ -27,7 +27,7 @@ function App() {
 
   useEffect(() => {
     // Fetch CSV file and parse it
-    Papa.parse("/sentences2.csv", {
+    Papa.parse(sentencesFilePath, {
       download: true, // Download the CSV file from the given URL
       complete: (result) => {
         const data = result.data.map(row => row[0]); // Assuming the sentences are in the first column
@@ -53,17 +53,17 @@ function App() {
 
       utterance.onend = () => {
         // Play system beep sound
-        const context = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = context.createOscillator();
-        oscillator.type = 'sine'; // Type of sound
-        oscillator.frequency.setValueAtTime(200, context.currentTime); // Frequency of the beep (1000 Hz)
-        oscillator.connect(context.destination);
-        oscillator.start();
-        oscillator.stop(context.currentTime + 0.4); // Duration of beep (0.2 seconds)
+        // const context = new (window.AudioContext || window.webkitAudioContext)();
+        // const oscillator = context.createOscillator();
+        // oscillator.type = 'sine'; // Type of sound
+        // oscillator.frequency.setValueAtTime(200, context.currentTime); // Frequency of the beep (1000 Hz)
+        // oscillator.connect(context.destination);
+        // oscillator.start();
+        // oscillator.stop(context.currentTime + 0.4); // Duration of beep (0.2 seconds)
 
         setShowCountdown(true);
-        let timer = 20;
-        let progressTimer = 20; // Initial duration for progress bar
+        let timer = 10;
+        let progressTimer = 10; // Initial duration for progress bar
         const countdownInterval = setInterval(() => {
           if (timer > 0) {
             setCountdown(timer);
@@ -73,7 +73,7 @@ function App() {
             clearInterval(countdownInterval);
             setCurrentSentence(sentence);
             setShowCountdown(false);
-            setCountdown(20);
+            setCountdown(10);
 
             // Add the current sentence to the completed sentences list
             setCompletedSentences((prev) => [...prev, sentence]);
@@ -126,7 +126,7 @@ function App() {
           Note: Please repeat the sentence exactly as you hear it. You will hear a sentence.
         </h2>
         <h2>
-          You will have 20 seconds to repeat the sentence. You will hear the sentence only once.
+          You will have 10 seconds to repeat the sentence. You will hear the sentence only once.
         </h2>
         <b><h2><p className="blue-text">After you repeated the sentence, you will again hear how the speaker has spoken exactly.</p></h2>
         </b>
