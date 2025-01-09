@@ -67,7 +67,6 @@ function App() {
         const countdownInterval = setInterval(() => {
           if (timer > 0) {
             setCountdown(timer);
-            setProgress((progressTimer - timer) / progressTimer * 100); // Correct way to fill progress bar left to right
             timer -= 1;
           } else {
             clearInterval(countdownInterval);
