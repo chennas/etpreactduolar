@@ -101,11 +101,11 @@ function App() {
       <h1>PTE Read Aloud Practice : {Math.min(currentSentenceIndex + 1, sentences.length)} / {sentences.length} Sentences</h1>
       <div className="instructions" style={{ textAlign: "left", width: "100%", marginBottom: "20px" }}>
         <b>
-          <p>
+          <h4>
             Instructions: Look at the paragraph below. In 40 seconds, read this text aloud as
             naturally and clearly as possible. You have 40 seconds to prepare. You get only 1 chance
             to record in the real exam.
-          </p>
+          </h4>
         </b>
       </div>
 
