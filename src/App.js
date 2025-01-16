@@ -1,179 +1,175 @@
 import React, { useState, useEffect } from "react";
-import Papa from "papaparse"; // Import papaparse library
-import '../src/styles/App.css';  // Import external CSS file for styles
+import Papa from "papaparse";
+import "../src/styles/App.css";
+
 function App() {
-  const sentencesFilePath = "/sentences8.csv";   //File path to load and read
+  const countDown = 5;
+  const sentencesFilePath = "sentences/ra01.csv"; // File path to load and read
   const [sentences, setSentences] = useState([]); // State to store sentences
   const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
-  const [isReading, setIsReading] = useState(false);
-  const [completedSentences, setCompletedSentences] = useState([]); // Only store completed sentences
-  const [speechFinished, setSpeechFinished] = useState(false);
-  const [countdown, setCountdown] = useState(10); // Countdown for the 10-second delay
-  const [showCountdown, setShowCountdown] = useState(false); // To control when to show countdown
-  const [currentSentence, setCurrentSentence] = useState(""); // Track the current sentence to show after countdown
-  const [voices, setVoices] = useState([]); // State for available voices
+  const [timer, setTimer] = useState(countDown); // Timer for the initial title and recording phases
+  const [isInitialPhase, setIsInitialPhase] = useState(true); // Controls initial title card phase
+  const [isRecordingPhase, setIsRecordingPhase] = useState(false); // Controls recording phase
+  const [currentSentence, setCurrentSentence] = useState(""); // Track the current sentence
   const [progress, setProgress] = useState(0); // State for progress
-
-  useEffect(() => {
-    // Fetch available voices
-    const handleVoiceChange = () => {
-      const speechSynthesisVoices = speechSynthesis.getVoices();
-      setVoices(speechSynthesisVoices);
-    };
-
-    handleVoiceChange(); // Initialize voices immediately
-    window.speechSynthesis.onvoiceschanged = handleVoiceChange; // Listen for changes
-  }, []);
+  const [showAnswer, setshowAnswer] = useState(false);
+  const [isComplete, setIsComplete] = useState(false); // Track completion status
 
   useEffect(() => {
     // Fetch CSV file and parse it
     Papa.parse(sentencesFilePath, {
-      download: true, // Download the CSV file from the given URL
+      download: true,
+      skipEmptyLines: true, // Skip any empty lines in the CSV
       complete: (result) => {
-        const data = result.data.map(row => row[0]); // Assuming the sentences are in the first column
+        const data = result.data
+          .map(row => row.join(',').trim())  // Join row elements (if any) and trim spaces
+          .join('\n')  // Join all rows with a newline character
+          .split('\n'); // Split the string into an array by new lines
+
         setSentences(data);
-      }
+      },
     });
   }, []);
 
   useEffect(() => {
-    if (isReading && currentSentenceIndex < sentences.length) {
-      const sentence = sentences[currentSentenceIndex];
-
-      // Create SpeechSynthesisUtterance object and set properties
-      const utterance = new SpeechSynthesisUtterance(sentence);
-      utterance.rate = 1;
-      utterance.pitch = 1;
-      utterance.volume = 1;
-
-      utterance.lang = currentSentenceIndex % 2 === 0 ? 'en-US' : 'en-GB'; // Randomize male/female voice
-
-      // Read the sentence aloud
-      speechSynthesis.speak(utterance);
-
-      utterance.onend = () => {
-        // Play system beep sound
-        // const context = new (window.AudioContext || window.webkitAudioContext)();
-        // const oscillator = context.createOscillator();
-        // oscillator.type = 'sine'; // Type of sound
-        // oscillator.frequency.setValueAtTime(200, context.currentTime); // Frequency of the beep (1000 Hz)
-        // oscillator.connect(context.destination);
-        // oscillator.start();
-        // oscillator.stop(context.currentTime + 0.4); // Duration of beep (0.2 seconds)
-
-        setShowCountdown(true);
-        let timer = 10;
-        let progressTimer = 10; // Initial duration for progress bar
-        const countdownInterval = setInterval(() => {
-          if (timer > 0) {
-            setCountdown(timer);
-            setProgress((progressTimer - timer) / progressTimer * 100); // Correct way to fill progress bar left to right
-            timer -= 1;
-          } else {
-            clearInterval(countdownInterval);
-            setCurrentSentence(sentence);
-            setShowCountdown(false);
-            setCountdown(10);
-
-            // Add the current sentence to the completed sentences list
-            setCompletedSentences((prev) => [...prev, sentence]);
-
-            const repeatUtterance = new SpeechSynthesisUtterance(sentence);
-            repeatUtterance.lang = utterance.lang;
-            repeatUtterance.rate = 1;
-            repeatUtterance.pitch = 1;
-            repeatUtterance.volume = 1;
-            speechSynthesis.speak(repeatUtterance);
-
-            repeatUtterance.onend = () => {
-              setTimeout(() => {
-                setCurrentSentence("");  // Clear the current sentence after repeat
-                setCurrentSentenceIndex((prev) => prev + 1);
-                setSpeechFinished(true);
-                setCompletedSentences([]); // Clear the table immediately after repeat
-              }, 5000);
-            };
-          }
-        }, 1000);
-      };
-
-      utterance.onerror = () => {
-        setSpeechFinished(true);
-      };
+    if (currentSentenceIndex < sentences.length) {
+      setCurrentSentence(sentences[currentSentenceIndex]);
     }
-  }, [isReading, currentSentenceIndex, voices, sentences]);
+  }, [currentSentenceIndex, sentences]);
+
+  useEffect(() => {
+    let interval = null;
+
+    if (timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+        setProgress(((countDown - timer + 1) / countDown) * 100); // Update progress
+      }, 1000);
+    } else {
+      clearInterval(interval);
+
+      if (isInitialPhase) {
+        // Transition from initial phase to recording phase
+        setshowAnswer(false);
+        setIsInitialPhase(false);
+        setIsRecordingPhase(true);
+        setTimer(countDown);
+        setProgress(0);
+      } else if (isRecordingPhase) {
+        // Transition from recording phase to playback phase
+        setIsRecordingPhase(false);
+        setshowAnswer(true);
+        playSentence();
+      }
+    }
+
+    return () => clearInterval(interval);
+  }, [timer, isInitialPhase, isRecordingPhase, showAnswer]);
+
+  const playSentence = () => {
+    speechSynthesis.cancel(); // Clear any existing utterances
+    const utterance = new SpeechSynthesisUtterance(currentSentence);
+    utterance.rate = 1;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+    utterance.lang = currentSentenceIndex % 2 === 0 ? 'en-US' : 'en-GB'; // Randomize male/female voice
+    speechSynthesis.speak(utterance);
+
+    utterance.onend = () => {
+      if (currentSentenceIndex + 1 >= sentences.length) {
+        // Mark as complete when all sentences are read
+        setIsComplete(true);
+      } else {
+        setshowAnswer(false);
+        setCurrentSentenceIndex((prev) => prev + 1);
+        setTimer(countDown);
+        setProgress(0);
+        setIsInitialPhase(true); // Restart the cycle for the next sentence
+      }
+    };
+  };
 
   const handleStart = () => {
-    setSpeechFinished(false);
-    setIsReading(true);
     setCurrentSentenceIndex(0);
-    setCompletedSentences([]); // Reset completed sentences
-    setProgress(0); // Reset progress bar
+    setTimer(countDown);
+    setProgress(0);
+    setIsInitialPhase(true);
   };
 
   return (
     <div className="container">
-      <div className="app-content">
-        <h1>
-          PTE Repeat Sentence Practice: {Math.min(currentSentenceIndex + 1, sentences.length)} / {sentences.length} Sentences
-        </h1>
-        {!isReading && (
-          <button onClick={handleStart} className="btn start-btn">
-            Start Reading
-          </button>
-        )}
-        <h2>
-          Note: Please repeat the sentence exactly as you hear it. You will hear a sentence.
-        </h2>
-        <h2>
-          You will have 10 seconds to repeat the sentence. You will hear the sentence only once.
-        </h2>
-        <b><h2><p className="blue-text">After you repeated the sentence, you will again hear how the speaker has spoken exactly.</p></h2>
+      <h1>PTE Read Aloud Practice : {Math.min(currentSentenceIndex + 1, sentences.length)} / {sentences.length} Sentences</h1>
+      <div className="instructions" style={{ textAlign: "left", width: "100%", marginBottom: "20px" }}>
+        <b>
+          <p>
+            Instructions: Look at the paragraph below. In 40 seconds, read this text aloud as
+            naturally and clearly as possible. You have 40 seconds to prepare. You get only 1 chance
+            to record in the real exam.
+          </p>
         </b>
-        <div className="sentences-read">
-          <table className="sentences-table">
-            <thead>
-              <tr>
-                <th><center>Sentence</center></th>
-              </tr>
-            </thead>
-            <tbody>
-              {completedSentences.slice(-1).map((sentence, index) => (  // Only show the last completed sentence
-                <tr key={index} className={`row-${index % 2 === 0 ? 'even' : 'odd'}`}>
-                  <td><center>{sentence}</center></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      </div>
 
-        {showCountdown && (
-          <div className="countdown-container">
-            <h1>Start repeating the sentence, timer will end in {String(countdown).padStart(2, '0')} seconds...</h1>
-            <div className="progress-bar">
-              <div className="progress-bar-fill" style={{ width: `${progress}%` }} />
-              <div className="progress-text">{Math.round(progress)}%</div>
+      <div className="app-content">
+        {isInitialPhase && !isComplete && (
+          <div className="phase-card">
+            <div className="timer-card">
+              <h2>Recording will start in {String(timer).padStart(2, "0")} seconds.</h2>
+              <div className="timer-bar">
+                <div
+                  className="timer-bar-fill"
+                  style={{
+                    width: `${progress}%`,
+                    backgroundColor: "#4caf50",
+                  }}
+                />
+              </div>
             </div>
           </div>
         )}
 
-        {speechFinished && !showCountdown && currentSentence && (
-          <div className="sentence-container">
-            <h1>{currentSentence}</h1>
+        {isRecordingPhase  && !isComplete && (
+          <div className="phase-card">
+            <div className="timer-card">
+              <h2>Recording Started. {String(timer).padStart(2, "0")} seconds remaining...</h2>
+              <div className="timer-bar">
+                <div
+                  className="timer-bar-fill"
+                  style={{
+                    width: `${progress}%`,
+                    backgroundColor: "#f44336",
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+        {showAnswer  && !isComplete && (
+          <div className="phase-card">
+            <div className="timer-card">
+              <h2 className="blue-text">Now, pay close attention to how you read aloud and compare it with how the speaker reads.</h2>
+              <div></div>
+            </div>
+          </div>
+        )}
+        <br />
+        <br />
+        {!isComplete && (
+        <div className="sentence-card">
+          <h3>{currentSentence}</h3>
+        </div>
+         )}
+        {isComplete && (
+          <div className="thank-you-message">
+            <h1 className="thank-you-title">🎉 Congratulations! 🎉</h1>
+            <p className="thank-you-text">
+              You've successfully completed all the sentences! Your dedication and effort are truly commendable.
+              Thank you for staying focused and practicing with us. Wishing you the best of luck on your PTE exam.
+              May you achieve the score you’ve been working so hard for. Keep up the great work, and remember —
+              this is just the beginning of your success! 💪🔥🌟💯
+            </p>
           </div>
         )}
       </div>
-      {currentSentenceIndex === sentences.length && (
-        <div className="thank-you-message">
-          <h1 className="thank-you-title">🎉 Congratulations! 🎉</h1>
-          <p className="thank-you-text">
-            You've successfully completed all the sentences! Your dedication and effort are truly commendable.
-            Thank you for staying focused and practicing with us. Wishing you the best of luck on your PTE exam.
-            May you achieve the score you’ve been working so hard for. Keep up the great work, and remember —
-            this is just the beginning of your success! 💪🔥🌟💯
-          </p>
-        </div>
-      )}
     </div>
   );
 }

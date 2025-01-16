@@ -48,11 +48,6 @@ button {
   color: white;
 }
 
-.stop-btn {
-  background-color: #f44336;
-  color: white;
-}
-
 /* Other content */
 .app-content {
   width: 100%;
@@ -206,4 +201,79 @@ th {
   color: #333;
   margin-top: 20px;
   line-height: 1.8;
+}
+
+.phase-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px auto;
+  background: #f9f9f9;
+}
+
+.timer-card {
+  margin: 10px 0;
+  max-width: 600px;
+}
+
+.timer-bar {
+  width: 80%;
+  height: 20px;
+  margin: 10px auto;
+  background: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.timer-bar-fill {
+  height: 100%;
+  transition: width 1s linear;
+}
+
+.sentence-card {
+  margin-top: 20px;
+}
+
+.sentence-card h3 {
+  font-size: 1.5rem;
+  color: #333;
+  text-align: justify;
+  margin-left: 50px;
+}
+
+.thank-you-message {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background: #4caf50;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.btn:hover {
+  background: #45a049;
+}
+
+.instructions {
+  text-align: justify;
+  width: 100%;
+  margin-bottom: 20px;
+  margin-left: 100px;
+}
+.phase-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 50%;
+  max-width: 500px;
 }
