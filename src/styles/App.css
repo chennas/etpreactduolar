@@ -1,0 +1,279 @@
+/* Ensure full page usage */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+/* Container should take full width and height */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;  /* Ensure the container takes full height */
+}
+
+/* Header styling */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;  /* Space between title and button */
+  width: 100%;  /* Full width */
+  padding: 10px;  /* Optional: Adds some padding around the header */
+}
+
+.header .btn {
+  margin-left: 20px; /* Adds space between title and button */
+}
+
+/* Button group styling */
+.button-group {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.start-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* Other content */
+.app-content {
+  width: 100%;
+  text-align: center;
+}
+
+h2, i p {
+  text-align: center;
+}
+
+.sentences-read {
+  margin-top: 20px;
+}
+
+/* Table styling for the sentences */
+table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+td, th {
+  padding: 5px 10px; /* Reduced padding for smaller rows */
+  border: 1px solid #ddd;
+  text-align: left;
+  height: 30px; /* Fixed height for rows */
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+/* Add more styles as needed */
+.sentences-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.sentences-table th, .sentences-table td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.sentences-table tr:nth-child(even) {
+  background-color: #f2f2f2; /* Light grey for even rows */
+}
+
+.sentences-table tr:nth-child(odd) {
+  background-color: #ffffff; /* White for odd rows */
+}
+
+.sentences-table td {
+  font-weight: bold; /* Make text bold */
+}
+
+.sentences-table th {
+  background-color: #4CAF50; /* Green header background */
+  color: white;
+}
+
+.sentences-table th, .sentences-table td {
+  padding: 4px 8px; /* Reduced padding to decrease row height */
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.app-content h1 {
+  margin-bottom: 10px; /* Adjust the space between the title and the next paragraph */
+}
+
+.app-content b, .app-content i {
+  margin-top: 0;
+  margin-bottom: 5px; /* Reduce space between the lines */
+}
+
+.app-content p {
+  margin-top: 5px; /* Reduce space between the paragraphs */
+}
+.blue-text {
+  color: blue;
+}
+
+.center-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: flex-start; /* Align to the top of the container */
+  height: 100vh; /* Full height of the viewport */
+  width: 100%; /* Ensure full width */
+  padding-top: 100px; /* Move content down from the vertical center */
+}
+
+.countdown-container,
+.sentence-container {
+  border: 3px solid blue; /* Blue border */
+  padding: 20px; /* Padding for the content */
+  margin-top: 20px; /* Space from previous elements */
+  border-radius: 10px; /* Rounded corners */
+  background-color: #e6f0ff; /* Light blue background */
+  color: blue; /* Blue text */
+  font-size: 24px; /* Larger text */
+  text-align: center; /* Center text */
+  font-weight: bold; /* Make the text bold */
+}
+
+
+.progress-bar {
+  width: 100%;
+  height: 40px; /* Height of the progress bar */
+  background-color: #ccc;
+  border-radius: 10px;
+  margin-top: 20px;
+  position: relative; /* Necessary for absolute positioning inside */
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: #4caf50;
+  width: 0%; /* Start from 0% */
+  border-radius: 10px;
+  transition: width 1s ease-in-out; /* Smooth transition from left to right */
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the text */
+  color: white;
+  font-weight: bold;
+  font-size: 12px; /* Adjust font size if necessary */
+}
+
+.thank-you-message {
+  text-align: center;
+  padding: 50px;
+  background-color: #f0f8ff;
+  border-radius: 10px;
+  margin-top: 50px;
+}
+
+.thank-you-title {
+  font-size: 3rem;
+  color: #28a745;
+  font-weight: bold;
+}
+
+.thank-you-text {
+  font-size: 1.5rem;
+  color: #333;
+  margin-top: 20px;
+  line-height: 1.8;
+}
+
+.phase-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px auto;
+  background: #f9f9f9;
+}
+
+.timer-card {
+  margin: 10px 0;
+  max-width: 600px;
+}
+
+.timer-bar {
+  width: 80%;
+  height: 20px;
+  margin: 10px auto;
+  background: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.timer-bar-fill {
+  height: 100%;
+  transition: width 1s linear;
+}
+
+.sentence-card {
+  margin-top: 20px;
+}
+
+.sentence-card h3 {
+  font-size: 1.5rem;
+  color: #333;
+  text-align: justify;
+  margin-left: 50px;
+}
+
+.thank-you-message {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background: #4caf50;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.btn:hover {
+  background: #45a049;
+}
+
+.instructions {
+  text-align: justify;
+  width: 100%;
+  margin-bottom: 20px;
+  margin-left: 100px;
+}
+.phase-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 50%;
+  max-width: 500px;
+}

@@ -1,0 +1,19 @@
+.sentence-display {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  .sentence-display p {
+    font-size: 20px;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+  
