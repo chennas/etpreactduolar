@@ -12,6 +12,7 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
   height: 100%;  /* Ensure the container takes full height */
 }
 
@@ -47,12 +48,77 @@ button {
   color: white;
 }
 
+.stop-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+/* Other content */
+.app-content {
+  width: 100%;
+  text-align: center;
+}
+
 h2, i p {
   text-align: center;
 }
 
 .sentences-read {
   margin-top: 20px;
+}
+
+/* Table styling for the sentences */
+table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+td, th {
+  padding: 5px 10px; /* Reduced padding for smaller rows */
+  border: 1px solid #ddd;
+  text-align: left;
+  height: 30px; /* Fixed height for rows */
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+/* Add more styles as needed */
+.sentences-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.sentences-table th, .sentences-table td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.sentences-table tr:nth-child(even) {
+  background-color: #f2f2f2; /* Light grey for even rows */
+}
+
+.sentences-table tr:nth-child(odd) {
+  background-color: #ffffff; /* White for odd rows */
+}
+
+.sentences-table td {
+  font-weight: bold; /* Make text bold */
+}
+
+.sentences-table th {
+  background-color: #4CAF50; /* Green header background */
+  color: white;
+}
+
+.sentences-table th, .sentences-table td {
+  padding: 4px 8px; /* Reduced padding to decrease row height */
+  text-align: left;
+  border: 1px solid #ddd;
 }
 
 .app-content h1 {
@@ -142,6 +208,7 @@ h2, i p {
   line-height: 1.8;
 }
 
+
 .phase-card {
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -157,7 +224,7 @@ h2, i p {
 
 .timer-bar {
   width: 80%;
-  height: 20px;
+  height: 40px;
   margin: 10px auto;
   background: #ddd;
   border-radius: 10px;
@@ -170,14 +237,16 @@ h2, i p {
 }
 
 .sentence-card {
-  margin-top: 20px;
+  margin-left: 20px;
 }
 
 .sentence-card h3 {
-  font-size: 1.5rem;
+  font-size: 1.9rem;
   color: #333;
   text-align: justify;
   margin-left: 50px;
+  width: 85%;
+  font-family:'Courier New', Courier, monospace
 }
 
 .thank-you-message {
@@ -200,10 +269,8 @@ h2, i p {
 }
 
 .instructions {
-  text-align: justify;
-  width: 100%;
-  margin-bottom: 20px;
-  margin-left: 100px;
+  text-align: center;
+  margin-left: 50px;
 }
 .phase-card {
   display: flex;

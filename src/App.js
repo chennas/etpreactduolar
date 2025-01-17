@@ -3,7 +3,7 @@ import Papa from "papaparse";
 import "../src/styles/App.css";
 
 function App() {
-  const countDown = 5;
+  const countDown = 39;
   const sentencesFilePath = "sentences/ra01.csv"; // File path to load and read
   const [sentences, setSentences] = useState([]); // State to store sentences
   const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
@@ -99,16 +99,18 @@ function App() {
   return (
     <div className="container">
       <h1>PTE Read Aloud Practice : {Math.min(currentSentenceIndex + 1, sentences.length)} / {sentences.length} Sentences</h1>
-      <div className="instructions" style={{ textAlign: "left", width: "100%", marginBottom: "20px" }}>
+      <div className="instructions">
         <b>
           <h4>
             Instructions: Look at the paragraph below. In 40 seconds, read this text aloud as
-            naturally and clearly as possible. You have 40 seconds to prepare. You get only 1 chance
+            naturally and clearly as possible.
+          </h4>
+          <h4>
+            You have 40 seconds to prepare. You get only 1 chance
             to record in the real exam.
           </h4>
         </b>
       </div>
-
       <div className="app-content">
         {isInitialPhase && !isComplete && (
           <div className="phase-card">
@@ -126,8 +128,7 @@ function App() {
             </div>
           </div>
         )}
-
-        {isRecordingPhase  && !isComplete && (
+        {isRecordingPhase && !isComplete && (
           <div className="phase-card">
             <div className="timer-card">
               <h2>Recording Started. {String(timer).padStart(2, "0")} seconds remaining...</h2>
@@ -143,21 +144,19 @@ function App() {
             </div>
           </div>
         )}
-        {showAnswer  && !isComplete && (
+        {showAnswer && !isComplete && (
           <div className="phase-card">
             <div className="timer-card">
-              <h2 className="blue-text">Now, pay close attention to how you read aloud and compare it with how the speaker reads.</h2>
-              <div></div>
+              <h2 className="blue-text">Pay close attention to how you read aloud and compare it with how the speaker reads.</h2>
             </div>
           </div>
         )}
         <br />
-        <br />
         {!isComplete && (
-        <div className="sentence-card">
-          <h3>{currentSentence}</h3>
-        </div>
-         )}
+          <div className="sentence-card">
+            <h3>{currentSentence}</h3>
+          </div>
+        )}
         {isComplete && (
           <div className="thank-you-message">
             <h1 className="thank-you-title">🎉 Congratulations! 🎉</h1>
